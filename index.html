@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<meta name="theme-color" content="#ffffea">
+	<meta http-equiv="onion-location" content="http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/">
+	<title>lnproxy.org</title>
+	<meta
+		name="description"
+		content="A simple lightning network privacy tool." />
+	<link rel="stylesheet" href="./assets/modern-normalize.css">
+	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="manifest" href="./assets/manifest.json">
+	<link rel="icon" type="image/png" href="./assets/icon.png">
+	<link rel="apple-touch-icon" sizes="512x512" href="./assets/icon512.png">
+
+</head>
+
+<body>
+
+<header>
+	<h1>↬ <a href="/">lnproxy.org</a></h1>
+	<nav><ul>
+    		<li><a href="/about.html">about</a></li>
+    		<li><a href="/doc.html">api</a></li>
+    		<li><a href="/contact.html">contact</a></li>
+  	</ul></nav>
+</header>
+
+<form id="mainform">
+	<textarea
+			name="invoice"
+			id="invoice"
+			autocomplete=off
+			autocorrect=off
+			autofocus=true
+			placeholder="lnbc..."
+			required=true
+			rows=3
+			spellcheck=false
+	></textarea>
+
+	<div>
+		<button type="button" id="atoggle" class="demph">more options ◀</button>
+	</div>
+
+	<div id="advanced" class="demph">
+		<div class="form_row"><label for="description">Description:</label>
+		<input
+			type="text"
+			name="description"
+			id="description"
+		></div>
+		<div class="form_row"><label for="routing">Routing budget (sat):</label>
+		<input
+			type="number"
+			name="routing"
+			id="routing"
+		></div>
+		<div class="form_row"><label for="relay">Relay:</label>
+		<input
+			type="url"
+			name="relay"
+			id="relay"
+			list="known_relays"
+			autocomplete=off
+			autocorrect=off
+		>
+		<datalist id="known_relays">
+			<option>http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/spec</option>
+			<option>https://lnproxy.org/spec</option>
+		</datalist>
+		</div>
+	</div>
+
+	<button type="submit" id="wrap">Wrap</button>
+	<span id="loading_message"><span class="spinner" id="wrap_spinner"></span> Connecting to relay...</span>
+</form>
+
+<div id="loading"></div>
+
+<div id="result"></div>
+
+<script src="./assets/qrcode.js"></script>
+<script src="./assets/main.js"></script>
+
+<footer>
+	<span class="demph">rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion</span>
+</footer>
+</body>
+</html>
