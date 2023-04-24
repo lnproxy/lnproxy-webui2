@@ -46,7 +46,7 @@ function wrapInvoice() {
 		invoice: invoice,
 	};
 	let relay = "https://lnproxy.org/spec";
-	if (navigator.userAgent.includes("Tor")) {
+	if (window.location.hostname.endsWith(".onion")) {
 		relay = "http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/spec";
 	}
 	if (advancedOptions.style.display === "block") {
@@ -126,7 +126,7 @@ function wrapInvoice() {
 		}
 
 		const routing_budget = parsed_proxy_invoice.msat_amount-parsed_invoice.msat_amount
-		if (("routing_msat" in data) && routing_budget != data.routing_msat) {
+		if ((parsed_invoice.msat_amount !== 0) && ("routing_msat" in data) && (routing_budget != data.routing_msat)) {
 			resultDiv.innerHTML += `
 				<div class="error">
 					Routing budget does not match request, try a different relay!
@@ -177,8 +177,8 @@ function wrapInvoice() {
 		`;
 		new QRCode(document.getElementById("qrcode"), {
 			text: x.proxy_invoice,
-			width: 512,
-			height: 512,
+			width: 400,
+			height: 400,
 			colorDark : "#000000",
 			colorLight : "rgba(0, 0, 0, 0)",
 			correctLevel : QRCode.CorrectLevel.M
