@@ -176,7 +176,7 @@ function wrapInvoice() {
 			<div id="qrcode"></div></a>
 		`;
 		new QRCode(document.getElementById("qrcode"), {
-			text: x.proxy_invoice,
+			text: x.proxy_invoice.toUpperCase(),
 			width: 400,
 			height: 400,
 			colorDark : "#000000",
