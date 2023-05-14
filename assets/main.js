@@ -5,6 +5,7 @@ const formInvoice = document.getElementById("invoice");
 const formDescription = document.getElementById("description");
 const formRouting = document.getElementById("routing");
 const formRelay = document.getElementById("relay");
+const relayList = document.getElementById("known_relays");
 const toggleButton = document.getElementById("atoggle");
 const advancedOptions = document.getElementById("advanced");
 const wrapButton = document.getElementById("wrap");
@@ -31,6 +32,30 @@ formDiv.addEventListener("submit", function(event) {
 	event.preventDefault();
 	wrapInvoice();
 });
+
+function populateRelayList(relays) {
+	relays.forEach((relay) => {
+		const option = document.createElement("option");
+		option.value = relay;
+		relayList.appendChild(option);
+	})
+}
+
+function fetchRelayList() {
+	fetch('assets/relays.json')
+		.then(response => response.json())
+		.then(data => populateRelayList(data))
+		.catch(error => {
+			resultDiv.innerHTML += `
+		<div class="error">
+			Unable to fetch relay list.
+		</div>
+	`;
+		})
+}
+
+// Ensure the relay list is populated before the user interacts with the page
+document.addEventListener('DOMContentLoaded', fetchRelayList);
 
 function wrapInvoice() {
 	wrapButton.disabled = true;
