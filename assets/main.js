@@ -11,6 +11,19 @@ const advancedOptions = document.getElementById("advanced");
 const wrapButton = document.getElementById("wrap");
 const loading = document.getElementById("loading_message");
 
+let availableRelays = [];
+let isTorBrowser = false;
+let failedRelays = new Set(); // Track failed relays during this session
+
+function checkTorBrowser() {
+	isTorBrowser = window.location.hostname.endsWith(".onion");
+	return isTorBrowser;
+}
+
+formRelay.addEventListener("click", function() {
+	this.value = '';
+});
+
 toggleButton.addEventListener("click", function() {
 	if (advancedOptions.style.display === "block") {
 		advancedOptions.style.display = "none";
@@ -34,12 +47,28 @@ formDiv.addEventListener("submit", function(event) {
 });
 
 function populateRelayList(relays) {
-	relays.forEach((relay) => {
+	const filteredRelays = isTorBrowser ?
+		relays :
+		relays.filter(relay => !relay.includes(".onion"));
+
+	availableRelays = filteredRelays;
+
+	filteredRelays.forEach((relay) => {
 		const option = document.createElement("option");
 		option.value = relay;
 		relayList.appendChild(option);
-	})
+	});
+	formRelay.value = "https://lnproxy.org/spec";
 }
+
+function getRandomRelay() {
+	let candidateRelays = availableRelays.filter(relay => !failedRelays.has(relay));
+	if (candidateRelays.length === 0) {
+		candidateRelays = availableRelays
+	}
+	const randomIndex = Math.floor(Math.random() * candidateRelays.length);
+	return candidateRelays[randomIndex];
+ }
 
 function fetchRelayList() {
 	fetch('assets/relays.json')
@@ -62,7 +91,7 @@ function wrapInvoice() {
 	loading.style.display = "inline-block";
 	const invoice = validInvoice(formInvoice.value);
 	if (invoice === "") {
-		resultDiv.innerHTML = `<div class="error">Error: Invalid invoice.</div>`;
+		resultDiv.innerHTML += `<div class="error">Error: Invalid invoice.</div>`;
 		loading.style.display = "none";
 		wrapButton.disabled = false;
 		return;
@@ -70,21 +99,15 @@ function wrapInvoice() {
 	const data = {
 		invoice: invoice,
 	};
-	let relay = "https://lnproxy.org/spec";
-	if (window.location.hostname.endsWith(".onion")) {
-		relay = "http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/spec";
-	}
+	let relay = formRelay.value;
 	if (advancedOptions.style.display === "block") {
 		data.description = formDescription.value;
 		const routing_sat = formRouting.value;
 		if (routing_sat != "") {
 			data.routing_msat = Math.round(1000*routing_sat).toString();
 		}
-		const user_relay = formRelay.value;
-		if (user_relay != "") {
-			relay = user_relay;
-		}
 	}
+	resultDiv.innerHTML += `<h2>Proxying through ${relay}</h2>`;
 
 	fetch(relay, {
 		method: "POST",
@@ -96,18 +119,18 @@ function wrapInvoice() {
 	.then(response => response.json())
 	.then(x => {
 		if (x.status === "ERROR") {
-			resultDiv.innerHTML = `<div class="error">Error: ${x.reason}</div>`;
+			resultDiv.innerHTML += `<div class="error">${relay} error: ${x.reason}</div>`;
+			failedRelays.add(relay);
+			formRelay.value = getRandomRelay();
 			loading.style.display = "none";
 			wrapButton.disabled = false;
 			return;
 		}
-
-		formDiv.remove();
 		
 		const parsed_invoice = parseInvoice(data.invoice);
 		const parsed_proxy_invoice = parseInvoice(x.proxy_invoice);
 
-		resultDiv.innerHTML = `
+		resultDiv.innerHTML += `
 			<dl>
 				<dt>Original invoice:</dt><dd class="invoice">
 					${parsed_invoice.as_spans}
@@ -120,11 +143,13 @@ function wrapInvoice() {
 		if (parsed_invoice.hash !== parsed_proxy_invoice.hash) {
 			resultDiv.innerHTML += `
 				<div class="error">
-					Hashes do not match, relay might be evil!
+					Hashes do not match, ${relay} might be evil!
 				</div>
 			`;
 			loading.style.display = "none";
 			wrapButton.disabled = false;
+			failedRelays.add(relay);
+			formRelay.value = getRandomRelay();
 			return;
 		}
 
@@ -136,6 +161,8 @@ function wrapInvoice() {
 			`;
 			loading.style.display = "none";
 			wrapButton.disabled = false;
+			failedRelays.add(relay);
+			formRelay.value = getRandomRelay();
 			return;
 		}
 
@@ -147,6 +174,8 @@ function wrapInvoice() {
 			`;
 			loading.style.display = "none";
 			wrapButton.disabled = false;
+			failedRelays.add(relay);
+			formRelay.value = getRandomRelay();
 			return;
 		}
 
@@ -159,6 +188,8 @@ function wrapInvoice() {
 			`;
 			loading.style.display = "none";
 			wrapButton.disabled = false;
+			failedRelays.add(relay);
+			formRelay.value = getRandomRelay();
 			return;
 		}
 
@@ -214,9 +245,11 @@ function wrapInvoice() {
 		wrapButton.disabled = false;
 	})
 	.catch(error => {
-		resultDiv.innerHTML = `<div class="error">Error: Could not connect to relay.</div>`;
+		resultDiv.innerHTML += `<div class="error">Error: Could not connect to ${relay}</div>`;
 		loading.style.display = "none";
 		wrapButton.disabled = false;
+		failedRelays.add(relay);
+		formRelay.value = getRandomRelay();
 	});
 
 };

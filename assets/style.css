@@ -80,6 +80,13 @@ textarea {
 	background: #ffffea;
 	resize: none;
 }
+#relay {
+	width: 100%;
+	padding: 1ex;
+	margin: 0.5ex 0;
+	border: 1px solid;
+	background: #ffffea;
+}
 input {
 	padding: 1ex;
 	margin: 0.5ex 0;
@@ -89,9 +96,10 @@ input {
 }
 button {
 	padding: 1ex;
-	margin: 0.5ex auto;
+//	margin: 0.5ex auto;
 	border: 1px solid;
-	background: #eaffff;
+	background: #ffffea;
+	cursor: pointer;
 }
 button:hover {
 	text-decoration: underline;

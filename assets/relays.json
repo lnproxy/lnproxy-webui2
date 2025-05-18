@@ -1,5 +1,6 @@
 [
-  "http://w3sqmns2ct7ai2wiwzq5uplp2pqglpm6qpeey4blvn6agj3jr5abthqd.onion/spec",
-  "http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/spec",
-  "https://lnproxy.org/spec"
+	"http://w3sqmns2ct7ai2wiwzq5uplp2pqglpm6qpeey4blvn6agj3jr5abthqd.onion/spec",
+	"http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/spec",
+	"https://lnproxy.org/spec",
+	"https://lnproxy.lnemail.net/spec"
 ]

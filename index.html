@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 	<meta name="theme-color" content="#ffffea">
-	<meta http-equiv="onion-location" content="http://rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion/">
+	<meta http-equiv="onion-location" content="http://dx7pn6ehykq6cadce4bjbxn5tf64z7e3fufpxgxce7n4f5eja476cpyd.onion/">
 	<title>lnproxy.org</title>
 	<meta
 		name="description"
@@ -12,7 +12,8 @@
 	<link rel="stylesheet" href="./assets/modern-normalize.css">
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="manifest" href="./assets/manifest.json">
-	<link rel="icon" type="image/png" href="./assets/icon.png">
+	<link rel="icon" type="image/png" href="./assets/icon192.png">
+	<link rel="shortcut icon" sizes="192x192" href="./assets/icon192.png">
 	<link rel="apple-touch-icon" sizes="512x512" href="./assets/icon512.png">
 
 </head>
@@ -28,7 +29,19 @@
   	</ul></nav>
 </header>
 
+<div id="result"></div>
+
 <form id="mainform">
+	<input
+		type="url"
+		name="relay"
+		id="relay"
+		list="known_relays"
+		autocomplete=off
+		autocorrect=off
+	>
+	<datalist id="known_relays">
+	</datalist>
 	<textarea
 			name="invoice"
 			id="invoice"
@@ -58,17 +71,6 @@
 			name="routing"
 			id="routing"
 		></div>
-		<div class="form_row"><label for="relay">Relay:</label>
-		<input
-			type="url"
-			name="relay"
-			id="relay"
-			list="known_relays"
-			autocomplete=off
-			autocorrect=off
-		>
-		<datalist id="known_relays">
-		</datalist>
 		</div>
 	</div>
 
@@ -76,15 +78,11 @@
 	<span id="loading_message"><span class="spinner" id="wrap_spinner"></span> Connecting to relay...</span>
 </form>
 
-<div id="loading"></div>
-
-<div id="result"></div>
-
 <script src="./assets/qrcode.js"></script>
 <script src="./assets/main.js"></script>
 
 <footer>
-	<span class="demph">rdq6tvulanl7aqtupmoboyk2z3suzkdwurejwyjyjf4itr3zhxrm2lad.onion</span>
+	<span class="demph">dx7pn6ehykq6cadce4bjbxn5tf64z7e3fufpxgxce7n4f5eja476cpyd.onion</span>
 </footer>
 </body>
 </html>
