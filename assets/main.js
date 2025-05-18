@@ -12,13 +12,7 @@ const wrapButton = document.getElementById("wrap");
 const loading = document.getElementById("loading_message");
 
 let availableRelays = [];
-let isTorBrowser = false;
 let failedRelays = new Set(); // Track failed relays during this session
-
-function checkTorBrowser() {
-	isTorBrowser = window.location.hostname.endsWith(".onion");
-	return isTorBrowser;
-}
 
 formRelay.addEventListener("click", function() {
 	this.value = '';
@@ -47,13 +41,8 @@ formDiv.addEventListener("submit", function(event) {
 });
 
 function populateRelayList(relays) {
-	const filteredRelays = isTorBrowser ?
-		relays :
-		relays.filter(relay => !relay.includes(".onion"));
-
-	availableRelays = filteredRelays;
-
-	filteredRelays.forEach((relay) => {
+	availableRelays = relays;
+	relays.forEach((relay) => {
 		const option = document.createElement("option");
 		option.value = relay;
 		relayList.appendChild(option);
