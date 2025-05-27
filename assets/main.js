@@ -11,11 +11,18 @@ const advancedOptions = document.getElementById("advanced");
 const wrapButton = document.getElementById("wrap");
 const loading = document.getElementById("loading_message");
 
+const storageKey = 'defaultRelay';
+const saved = localStorage.getItem(storageKey);
+if (saved !== null) formRelay.value = saved;
+
 let availableRelays = [];
-let failedRelays = new Set(); // Track failed relays during this session
+let failedRelays = new Set();
 
 formRelay.addEventListener("click", function() {
 	this.value = '';
+});
+formRelay.addEventListener("input", function() {
+	localStorage.setItem(storageKey, formRelay.value);
 });
 
 toggleButton.addEventListener("click", function() {
