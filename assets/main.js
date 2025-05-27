@@ -42,16 +42,19 @@ formDiv.addEventListener("submit", function(event) {
 
 function populateRelayList(relays) {
 	availableRelays = relays;
-	relays.forEach((relay) => {
-		const option = document.createElement("option");
-		option.value = relay;
-		relayList.appendChild(option);
-	});
-	formRelay.value = "https://lnproxy.org/spec";
+	relays
+		.filter(relay => !relay.includes(".onion"))
+		.forEach((relay) => {
+			const option = document.createElement("option");
+			option.value = relay;
+			relayList.appendChild(option);
+		});
 }
 
 function getRandomRelay() {
-	let candidateRelays = availableRelays.filter(relay => !failedRelays.has(relay));
+	let candidateRelays = availableRelays
+		.filter(relay => !relay.includes(".onion"))
+		.filter(relay => !failedRelays.has(relay));
 	if (candidateRelays.length === 0) {
 		candidateRelays = availableRelays
 	}
@@ -88,7 +91,7 @@ function wrapInvoice() {
 	const data = {
 		invoice: invoice,
 	};
-	let relay = formRelay.value;
+	let relay = formRelay.value || getRandomRelay();
 	if (advancedOptions.style.display === "block") {
 		data.description = formDescription.value;
 		const routing_sat = formRouting.value;
